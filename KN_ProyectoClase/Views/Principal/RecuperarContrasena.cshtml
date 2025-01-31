@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_LayoutExterno.cshtml";
 }
 
-
 <div class="row justify-content-center" style="margin-top:100px">
 
     <div class="col-xl-10 col-lg-12 col-md-9">
@@ -13,38 +12,27 @@
             <div class="card-body p-0">
 
                 <div class="row">
-                    <div class="col-lg-2"></div>
-                    <div class="col-lg-8">
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-6">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                                <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
+                                <p class="mb-4">
+                                    We get it, stuff happens. Just enter your email address below
+                                    and we'll send you a link to reset your password!
+                                </p>
                             </div>
                             <form class="user">
-
                                 <div class="form-group">
-                                    @Html.TextBoxFor(x => x.Identificacion, new { @class = "form-control form-control-user", @placeholder = "Identificación" })
+                                    @Html.TextBoxFor(x => x.Correo, new { @class = "form-control form-control-user", @placeholder = "Ingrese correo asociado..." })
                                 </div>
-
-                                <div class="form-group">
-                                    @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control form-control-user", @placeholder = "Nombre" })
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.TextBoxFor(x => x.Correo, new { @class = "form-control form-control-user", @placeholder = "Correo" })
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.TextBoxFor(x => x.Contrasena, new { @class = "form-control form-control-user", @placeholder = "Contraseña" })
-                                </div>
-
-                                <a href="login.html" class="btn btn-danger btn-user btn-block">
-                                    Register Account
+                                <a href="login.html" class="btn btn-primary btn-user btn-block">
+                                    Reset Password
                                 </a>
-
                             </form>
                             <hr>
                             <div class="text-center">
-                                <a class="small" href="@Url.Action("RecuperarContrasena", "Principal")">Recuperar Contraseña?</a>
+                                <a class="small" href="@Url.Action("RegistrarCuenta", "Principal")">Crear una cuenta!</a>
                             </div>
                             <div class="text-center">
                                 <a class="small" href="@Url.Action("IniciarSesion", "Principal")">Iniciar Sesión!</a>
@@ -55,8 +43,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
+
     </div>
+
 </div>

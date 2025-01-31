@@ -194,6 +194,7 @@
     <Content Include="Views\Shared\_LayoutExterno.cshtml" />
     <Content Include="Views\Principal\IniciarSesion.cshtml" />
     <Content Include="Views\Principal\RegistrarCuenta.cshtml" />
+    <Content Include="Views\Principal\RecuperarContrasena.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
