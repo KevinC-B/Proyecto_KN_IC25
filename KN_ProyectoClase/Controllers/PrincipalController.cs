@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using KN_ProyectoClase.BaseDatos;
 using KN_ProyectoClase.Models;
 
@@ -22,31 +23,41 @@ namespace KN_ProyectoClase.Controllers
         public ActionResult RegistrarCuenta(UsuarioModel model)
         {
             //EF(EntityFramework)
+
             //EF utilizando LinQ
-            using (var context = new KN_DBEntities())
-            {
-                Usuario tabla = new Usuario();
-                tabla.Identificacion = model.Identificacion;
-                tabla.Contrasena = model.Contrasena;
-                tabla.Nombre = model.Nombre;
-                tabla.Correo = model.Correo;
-                tabla.Estado = true;
-                tabla.IdPerfil = 2;
-
-                context.Usuario.Add(tabla); //Añade los atributos(info) que le pasamos por vista a la BD
-                context.SaveChanges(); //Guarda los cambios
-            }
-
-            //EF utilizando SP
             //using (var context = new KN_DBEntities())
             //{
-            //    context.RegistrarCuenta(model.Identificacion, model.Contrasena, model.Nombre, model.Correo);
+            //    Usuario tabla = new Usuario();
+            //    tabla.Identificacion = model.Identificacion;
+            //    tabla.Contrasena = model.Contrasena;
+            //    tabla.Nombre = model.Nombre;
+            //    tabla.Correo = model.Correo;
+            //    tabla.Estado = true;
+            //    tabla.IdPerfil = 2;
+
+            //    context.Usuario.Add(tabla); //Añade los atributos(info) que le pasamos por vista a la BD
+            //    context.SaveChanges(); //Guarda los cambios
             //}
+
+            //EF utilizando SP
+            using (var context = new KN_DBEntities())
+            {
+                var result = context.RegistrarCuenta(model.Identificacion, model.Contrasena, model.Nombre, model.Correo);
+
+                if (result > 0)
+                {
+                    return RedirectToAction("IniciarSesion", "Principal");
+                } 
+                else
+                {
+                    ViewBag.Mensaje = "Su información no se ha podido registrar correctamente";
+                    return View();
+                }
+            }
 
             return View();
         }
         #endregion
-
 
         #region IniciarSesion
         [HttpGet]
@@ -75,15 +86,19 @@ namespace KN_ProyectoClase.Controllers
             //EF SP
             using(var context = new KN_DBEntities())
             {
-                context.IniciarSesion(model.Identificacion, model.Contrasena).FirstOrDefault();
+                var info = context.IniciarSesion(model.Identificacion, model.Contrasena).FirstOrDefault();
 
-                if (context != null)
+                if (info != null)
                 {
+                    Session["NombreUsuario"] = info.Nombre;
                     return RedirectToAction("Inicio", "Principal");
                 }
+                else
+                {
+                    ViewBag.Mensaje = "Su información no se ha podido validar correctamente";
+                    return View();
+                }
             }
-
-            return View();
         }
         #endregion
 
@@ -91,6 +106,13 @@ namespace KN_ProyectoClase.Controllers
         public ActionResult Inicio()
         {
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult CerrarSession()
+        {
+            Session.Clear();
+            return RedirectToAction("Inicio", "Principal");
         }
 
         [HttpGet]

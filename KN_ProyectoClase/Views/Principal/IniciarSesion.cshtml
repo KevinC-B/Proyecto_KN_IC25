@@ -18,17 +18,25 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                             </div>
+
+                            @if (ViewBag.Mensaje != null)
+                            {
+                                <div class="alert alert-warning msjCentrado" role="alert">
+                                    @ViewBag.Mensaje
+                                </div>
+                            }
+
                             @using (Html.BeginForm("IniciarSesion", "Principal"))
                             {
-                                    <div class="form-group">
-                                        @Html.TextBoxFor(x => x.Identificacion, new { @class = "form-control form-control-user", @placeholder = "Identificación" })
-                                    </div>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(x => x.Identificacion, new { @class = "form-control form-control-user", @placeholder = "Identificación", @Required="true" })
+                                </div>
 
-                                    <div class="form-group">
-                                        @Html.TextBoxFor(x => x.Contrasena, new { @class = "form-control form-control-user", @placeholder = "Contraseña", @type = "password" })
-                                    </div>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(x => x.Contrasena, new { @class = "form-control form-control-user", @placeholder = "Contraseña", @type = "password", @Required="true"})
+                                </div>
 
-                                    <input type="submit" class="btn btn-danger btn-user btn-block" value="Login"/>
+                                <input type="submit" class="btn btn-danger btn-user btn-block" value="Login" />
                             }
                             <hr>
                             <div class="text-center">
