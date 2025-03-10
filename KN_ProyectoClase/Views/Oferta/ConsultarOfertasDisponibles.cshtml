@@ -1,0 +1,54 @@
+﻿@model List<KN_ProyectoClase.BaseDatos.ConsultarOfertas_Result>
+
+@{
+    ViewBag.Title = "ConsultarOfertas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Ofertas Disponibles</h6>
+        </div>
+        <div class="card-body">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Cantidad</th>
+                                    <th>Salario</th>
+                                    <th>Horario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.Nombre</td>
+                                        <td>@item.Descripcion</td>
+                                        <td>@item.Cantidad</td>
+                                        <td>$@item.Salario.ToString("N2")</td>
+                                        <td>@item.Horario</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

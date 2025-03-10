@@ -4,10 +4,13 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5f2560cec07f4f93808815885ddef545" Name="Diagram1">
+      <Diagram DiagramId="3a73cc11d008481d8e109ec94b8704a1" Name="Diagram1">
         <EntityTypeShape EntityType="KN_DBModel.Perfil" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="KN_DBModel.Puesto" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="KN_DBModel.Usuario" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="KN_DBModel.FK_Usuario_Perfil" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="KN_DBModel.Oferta" Width="1.5" PointX="3" PointY="4.5" />
+        <AssociationConnector Association="KN_DBModel.FK_Oferta_Oferta" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

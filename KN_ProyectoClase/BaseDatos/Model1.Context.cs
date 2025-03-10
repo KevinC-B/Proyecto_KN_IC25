@@ -28,7 +28,22 @@ namespace KN_ProyectoClase.BaseDatos
         }
     
         public virtual DbSet<Perfil> Perfil { get; set; }
+        public virtual DbSet<Puesto> Puesto { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<Oferta> Oferta { get; set; }
+    
+        public virtual ObjectResult<IniciarSesion_Result> IniciarSesion(string identificacion, string contrasena)
+        {
+            var identificacionParameter = identificacion != null ?
+                new ObjectParameter("Identificacion", identificacion) :
+                new ObjectParameter("Identificacion", typeof(string));
+    
+            var contrasenaParameter = contrasena != null ?
+                new ObjectParameter("Contrasena", contrasena) :
+                new ObjectParameter("Contrasena", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<IniciarSesion_Result>("IniciarSesion", identificacionParameter, contrasenaParameter);
+        }
     
         public virtual int RegistrarCuenta(string identificacion, string contrasena, string nombre, string correo)
         {
@@ -51,17 +66,14 @@ namespace KN_ProyectoClase.BaseDatos
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RegistrarCuenta", identificacionParameter, contrasenaParameter, nombreParameter, correoParameter);
         }
     
-        public virtual ObjectResult<IniciarSesion_Result> IniciarSesion(string identificacion, string contrasena)
+        public virtual ObjectResult<ConsultarPuestos_Result> ConsultarPuestos()
         {
-            var identificacionParameter = identificacion != null ?
-                new ObjectParameter("Identificacion", identificacion) :
-                new ObjectParameter("Identificacion", typeof(string));
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarPuestos_Result>("ConsultarPuestos");
+        }
     
-            var contrasenaParameter = contrasena != null ?
-                new ObjectParameter("Contrasena", contrasena) :
-                new ObjectParameter("Contrasena", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<IniciarSesion_Result>("IniciarSesion", identificacionParameter, contrasenaParameter);
+        public virtual ObjectResult<ConsultarOfertas_Result> ConsultarOfertas()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarOfertas_Result>("ConsultarOfertas");
         }
     }
 }
