@@ -5,12 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    .margen {
-        margin: 5px 5px 20px;
-    }
-</style>
-
 <div class="container-fluid">
 
     <div class="card shadow mb-4">
@@ -24,29 +18,35 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <a class="btn btn-primary margen" href="@Url.Action("AgregarOferta","Oferta")">Agregar</a>
+                        <div class="margen">
+                            <a class="btn btn-primary" href="@Url.Action("AgregarOferta","Oferta")">Agregar</a>
+                        </div>
                         <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>Id</th>
                                     <th>Nombre</th>
-                                    <th>Descripción</th>
                                     <th>Cantidad</th>
                                     <th>Salario</th>
                                     <th>Horario</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
 
                                 @foreach (var item in Model)
                                 {
+                                    var disponible = item.Disponible ? "Activo" : "Inactivo";
+
                                     <tr>
                                         <td>@item.Id</td>
                                         <td>@item.Nombre</td>
-                                        <td>@item.Descripcion</td>
                                         <td>@item.Cantidad</td>
                                         <td>$@item.Salario.ToString("N2")</td>
                                         <td>@item.Horario</td>
+                                        <td>@item.Disponible</td>
+                                        <td><a href="@Url.Action("ActualizarOferta", "Oferta", new { q = item.Id})"><i class="fa fa-edit"></i></a></td>
                                     </tr>
                                 }
 

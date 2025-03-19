@@ -30,11 +30,11 @@
                             @using (Html.BeginForm("RegistrarCuenta", "Principal"))
                             {
                                 <div class="form-group">
-                                    @Html.TextBoxFor(x => x.Identificacion, new { @class = "form-control form-control-user", @placeholder = "Identificación", @Required = "true", @onclick = "ConsultarNombre();" })
+                                    @Html.TextBoxFor(x => x.Identificacion, new { @class = "form-control form-control-user", @placeholder = "Identificación", @Required = "true"})
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control form-control-user", @placeholder = "Nombre", @Required = "true", @ReadOnly = "true" })
+                                    @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control form-control-user", @placeholder = "Nombre", @Required = "true"})
                                 </div>
 
                                 <div class="form-group">

@@ -4,3 +4,8 @@
 .msjCentrado {
     text-align: center;
 }
+
+.margen {
+    margin: 10px 10px 20px;
+    text-align: right;
+}
