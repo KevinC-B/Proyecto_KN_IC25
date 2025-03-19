@@ -95,7 +95,7 @@ namespace KN_ProyectoClase.Controllers
                 var result = context.SaveChanges();
 
                 if (result > 0)
-                    return RedirectToAction("ConsultarPuestos", "Puesto");
+                    return RedirectToAction("ConsultarOfertas", "Oferta");
                 else
                 {
                     ViewBag.Mensaje = "La información no se ha podido registrar correctamente";
