@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Cryptography.Xml;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using System.Web.UI;
 using KN_ProyectoClase.BaseDatos;
 using KN_ProyectoClase.Models;
@@ -12,11 +16,21 @@ namespace KN_ProyectoClase.Controllers
 {
     public class PrincipalController : Controller
     {
+        RegistroErrores error = new RegistroErrores();
+
         #region RegistrarCuenta
         [HttpGet]
-        public ActionResult RegistrarCuenta() 
+        public ActionResult RegistrarCuenta()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                error.RegistrarError(ex.Message, "Get RegistrarCuenta");
+                return View("Error");
+            }
         }
 
         [HttpPost]
@@ -39,23 +53,29 @@ namespace KN_ProyectoClase.Controllers
             //    context.SaveChanges(); //Guarda los cambios
             //}
 
-            //EF utilizando SP
-            using (var context = new KN_DBEntities())
+            try
             {
-                var result = context.RegistrarCuenta(model.Identificacion, model.Contrasena, model.Nombre, model.Correo);
+                //EF utilizando SP
+                using (var context = new KN_DBEntities())
+                {
+                    var result = context.RegistrarCuenta(model.Identificacion, model.Contrasena, model.Nombre, model.Correo);
 
-                if (result > 0)
-                {
-                    return RedirectToAction("IniciarSesion", "Principal");
-                } 
-                else
-                {
-                    ViewBag.Mensaje = "Su información no se ha podido registrar correctamente";
-                    return View();
+                    if (result > 0)
+                    {
+                        return RedirectToAction("IniciarSesion", "Principal");
+                    }
+                    else
+                    {
+                        ViewBag.Mensaje = "Su información no se ha podido registrar correctamente";
+                        return View();
+                    }
                 }
             }
-
-            return View();
+            catch (Exception ex)
+            {
+                error.RegistrarError(ex.Message, "Post RegistrarCuenta");
+                return View("Error");
+            }
         }
         #endregion
 
@@ -63,7 +83,15 @@ namespace KN_ProyectoClase.Controllers
         [HttpGet]
         public ActionResult IniciarSesion()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                error.RegistrarError(ex.Message, "Get IniciarSesion");
+                return View("Error");
+            }
         }
 
         [HttpPost]
@@ -83,45 +111,155 @@ namespace KN_ProyectoClase.Controllers
             //    }
             //}
 
-            //EF SP
-            using(var context = new KN_DBEntities())
+            try
             {
-                var info = context.IniciarSesion(model.Identificacion, model.Contrasena).FirstOrDefault();
+                //EF SP
+                using (var context = new KN_DBEntities())
+                {
+                    var info = context.IniciarSesion(model.Identificacion, model.Contrasena).FirstOrDefault();
 
-                if (info != null)
-                {
-                    Session["NombreUsuario"] = info.NombreUsuario;
-                    Session["NombrePerfilUsuario"] = info.NombrePerfil;
-                    Session["IdPerfilUsuario"] = info.IdPerfil;
-                    return RedirectToAction("Inicio", "Principal");
-                }
-                else
-                {
-                    ViewBag.Mensaje = "Su información no se ha podido validar correctamente";
-                    return View();
+                    if (info != null)
+                    {
+                        Session["IdUsuario"] = info.Id;
+                        Session["NombreUsuario"] = info.NombreUsuario;
+                        Session["NombrePerfilUsuario"] = info.NombrePerfil;
+                        Session["IdPerfilUsuario"] = info.IdPerfil;
+                        return RedirectToAction("Inicio", "Principal");
+                    }
+                    else
+                    {
+                        ViewBag.Mensaje = "Su información no se ha podido validar correctamente";
+                        return View();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                error.RegistrarError(ex.Message, "Post IniciarSesion");
+                return View("Error");
+            }
         }
+        #endregion
+
+        #region RecuperarContrasena
+        [HttpGet]
+        public ActionResult RecuperarContrasena()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                error.RegistrarError(ex.Message, "Get RecuperarContrasena");
+                return View("Error");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult RecuperarContrasenna(UsuarioModel model)
+        {
+            try
+            {
+                using (var context = new KN_DBEntities())
+                {
+                    var info = context.Usuario.Where(x => x.Correo == model.Correo
+                                                       && x.Estado == true).FirstOrDefault();
+                    if (info != null)
+                    {
+                        var codigoTemporal = CrearCodigo();
+
+                        info.Contrasena = codigoTemporal;
+                        context.SaveChanges();
+
+                        var notificacion = EviarCorreo(info, codigoTemporal, "Acceso al sistema KN");
+
+                        if (notificacion)
+                        {
+                            return RedirectToAction("IniciarSesion", "Principal");
+                        }
+                        else
+                        {
+                            ViewBag.Mensaje = "Su información no se ha podido validar correctamente";
+                            return View();
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.Mensaje = "Su información no se ha podido validar correctamente";
+                        return View();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                error.RegistrarError(ex.Message, "Post RecuperarContrasena");
+                return View("Error");
+            }
+        }
+
         #endregion
 
         [HttpGet]
         public ActionResult Inicio()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                error.RegistrarError(ex.Message, "Get RegistrarCuenta");
+                return View("Error");
+            }
         }
 
         [HttpGet]
         public ActionResult CerrarSession()
         {
-            Session.Clear();
-            return RedirectToAction("Inicio", "Principal");
+            try
+            {
+                Session.Clear();
+                return RedirectToAction("Inicio", "Principal");
+            }
+            catch (Exception ex)
+            {
+                error.RegistrarError(ex.Message, "Get CerrarSession");
+                return View("Error");
+            }
         }
 
-        [HttpGet]
-        public ActionResult RecuperarContrasena()
+        private string CrearCodigo()
         {
-            return View();
+            int length = 5;
+            const string valid = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
+            {
+                res.Append(valid[rnd.Next(valid.Length)]);
+            }
+            return res.ToString();
         }
 
+        private bool EviarCorreo(Usuario info, string codigo, string titulo)
+        {
+            string cuenta = ConfigurationManager.AppSettings["CorreoNotificaciones"].ToString();
+            string contrasenna = ConfigurationManager.AppSettings["ContrasennaNotificaciones"].ToString();
+
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress(cuenta);
+            mail.To.Add(new MailAddress(info.Correo));
+            mail.Subject = titulo;
+            mail.Body = $"Hola {info.Nombre}, por favor utilice el siguiente código para ingresar al sistema: {codigo}";
+            mail.Priority = MailPriority.Normal;
+            mail.IsBodyHtml = true;
+
+            SmtpClient MailClient = new SmtpClient("smtp.office365.com", 587);
+            MailClient.Credentials = new System.Net.NetworkCredential(cuenta, contrasenna);
+            MailClient.EnableSsl = true;
+            MailClient.Send(mail);
+            return true;
+        }
     }
 }

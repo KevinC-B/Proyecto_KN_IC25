@@ -4,7 +4,23 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="KN_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="KN_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'KN_DB.dbo.Error' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Error">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="IdUsuario" />
+            <PropertyRef Name="Mensaje" />
+            <PropertyRef Name="FechaHora" />
+            <PropertyRef Name="Origen" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuario" Type="bigint" Nullable="false" />
+          <Property Name="Mensaje" Type="varchar(max)" Nullable="false" />
+          <Property Name="FechaHora" Type="datetime" Nullable="false" />
+          <Property Name="Origen" Type="varchar" MaxLength="500" Nullable="false" />
+        </EntityType>
         <EntityType Name="Oferta">
           <Key>
             <PropertyRef Name="Id" />
@@ -113,12 +129,26 @@
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="Correo" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="RegistrarError" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="bigint" Mode="In" />
+          <Parameter Name="Mensaje" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Origen" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="KN_DBModelStoreContainer">
           <EntitySet Name="Oferta" EntityType="Self.Oferta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Perfil" EntityType="Self.Perfil" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Puesto" EntityType="Self.Puesto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UsuariosOferta" EntityType="Self.UsuariosOferta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Error" EntityType="Self.Error" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Error].[Id] AS [Id], 
+    [Error].[IdUsuario] AS [IdUsuario], 
+    [Error].[Mensaje] AS [Mensaje], 
+    [Error].[FechaHora] AS [FechaHora], 
+    [Error].[Origen] AS [Origen]
+    FROM [dbo].[Error] AS [Error]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Oferta_Oferta" Association="Self.FK_Oferta_Oferta">
             <End Role="Puesto" EntitySet="Puesto" />
             <End Role="Oferta" EntitySet="Oferta" />
@@ -136,8 +166,7 @@
             <End Role="UsuariosOferta" EntitySet="UsuariosOferta" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="KN_DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -279,6 +308,12 @@
             <Parameter Name="Nombre" Mode="In" Type="String" />
             <Parameter Name="Correo" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Error" EntityType="KN_DBModel.Error" />
+          <FunctionImport Name="RegistrarError">
+            <Parameter Name="IdUsuario" Mode="In" Type="Int64" />
+            <Parameter Name="Mensaje" Mode="In" Type="String" />
+            <Parameter Name="Origen" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="ConsultarOfertas_Result">
           <Property Type="Int64" Name="Id" Nullable="false" />
@@ -305,6 +340,20 @@
           <Property Type="Int32" Name="IdPerfil" Nullable="false" />
           <Property Type="String" Name="NombrePerfil" Nullable="false" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="Error">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="IdUsuario" />
+            <PropertyRef Name="Mensaje" />
+            <PropertyRef Name="FechaHora" />
+            <PropertyRef Name="Origen" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuario" Type="Int64" Nullable="false" />
+          <Property Name="Mensaje" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Origen" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -402,6 +451,18 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="RegistrarCuenta" FunctionName="KN_DBModel.Store.RegistrarCuenta" />
+          <EntitySetMapping Name="Error">
+            <EntityTypeMapping TypeName="KN_DBModel.Error">
+              <MappingFragment StoreEntitySet="Error">
+                <ScalarProperty Name="Origen" ColumnName="Origen" />
+                <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="RegistrarError" FunctionName="KN_DBModel.Store.RegistrarError" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

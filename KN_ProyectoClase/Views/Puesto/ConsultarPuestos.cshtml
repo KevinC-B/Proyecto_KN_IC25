@@ -9,7 +9,7 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Mantenimiento de Puestos</h6>
+            <h5 class="m-0 font-weight-bold text-primary">Mantenimiento de Puestos</h5>
         </div>
         <div class="card-body">
             <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -21,7 +21,7 @@
                         <div class="margen">
                             <a class="btn btn-primary" href="@Url.Action("AgregarPuesto", "Puesto")">Agregar</a>
                         </div>
-                        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                        <table id="example" class="table table-bordered table-hover" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -50,3 +50,16 @@
         </div>
     </div>
 </div>
+
+<script src="~/Template/js/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        var table = new DataTable('#example', {
+            language: {
+                url: '//cdn.datatables.net/plug-ins/2.2.2/i18n/es-ES.json',
+            },
+        });
+    });
+
+</script>
