@@ -17,6 +17,7 @@ namespace KN_ProyectoClase.Controllers
     public class PrincipalController : Controller
     {
         RegistroErrores error = new RegistroErrores();
+        Utilitarios util = new Utilitarios();    
 
         #region RegistrarCuenta
         [HttpGet]
@@ -172,7 +173,8 @@ namespace KN_ProyectoClase.Controllers
                         info.Contrasena = codigoTemporal;
                         context.SaveChanges();
 
-                        var notificacion = EviarCorreo(info, codigoTemporal, "Acceso al sistema KN");
+                        string mensaje = $"Hola {info.Nombre}, por favor utilice el siguiente código para ingresar al sistema: {codigoTemporal}";
+                        var notificacion = util.EviarCorreo(info, mensaje, "Acceso al sistema KN");
 
                         if (notificacion)
                         {
@@ -205,7 +207,12 @@ namespace KN_ProyectoClase.Controllers
         {
             try
             {
-                return View();
+                using (var context = new KN_DBEntities())
+                {
+                    var info = context.ConsultarOfertas().Where(x => x.Disponible == true).ToList();
+                    return View(info);
+
+                }
             }
             catch (Exception ex)
             {
@@ -242,24 +249,5 @@ namespace KN_ProyectoClase.Controllers
             return res.ToString();
         }
 
-        private bool EviarCorreo(Usuario info, string codigo, string titulo)
-        {
-            string cuenta = ConfigurationManager.AppSettings["CorreoNotificaciones"].ToString();
-            string contrasenna = ConfigurationManager.AppSettings["ContrasennaNotificaciones"].ToString();
-
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress(cuenta);
-            mail.To.Add(new MailAddress(info.Correo));
-            mail.Subject = titulo;
-            mail.Body = $"Hola {info.Nombre}, por favor utilice el siguiente código para ingresar al sistema: {codigo}";
-            mail.Priority = MailPriority.Normal;
-            mail.IsBodyHtml = true;
-
-            SmtpClient MailClient = new SmtpClient("smtp.office365.com", 587);
-            MailClient.Credentials = new System.Net.NetworkCredential(cuenta, contrasenna);
-            MailClient.EnableSsl = true;
-            MailClient.Send(mail);
-            return true;
-        }
     }
 }

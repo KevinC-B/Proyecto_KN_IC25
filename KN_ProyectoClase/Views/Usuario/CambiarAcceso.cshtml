@@ -1,0 +1,47 @@
+﻿@model KN_ProyectoClase.Models.UsuarioModel
+
+@{
+    ViewBag.Title = "CambiarAcceso";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-lg-3 col-md-2"></div>
+    <div class="col-lg-6 col-md-8">
+
+        <div class="text-center">
+            <h1 class="h4 text-gray-900 mb-4">Actualizar Contraseña</h1>
+        </div>
+
+        @if (ViewBag.Mensaje != null)
+        {
+            <div class="alert alert-warning msjCentrado" role="alert">
+                @ViewBag.Mensaje
+            </div>
+        }
+
+        @using (Html.BeginForm("CambiarAcceso", "Usuario"))
+        {
+            <div class="form-group">
+                Contraseña Anterior
+                @Html.TextBoxFor(x => x.ContrasenaAnterior, new { @class = "form-control form-control-user", @Required = "true", @type = "password" })
+            </div>
+        
+            <div class="form-group">
+                Nueva Contraseña
+                @Html.TextBoxFor(x => x.Contrasena, new { @class = "form-control form-control-user", @Required = "true", @type = "password" })
+            </div>
+        
+            <div class="form-group">
+                Confirmar Contraseña
+                @Html.TextBoxFor(x => x.ConfirmarContrasena, new { @class = "form-control form-control-user", @Required = "true", @type = "password" })
+            </div>
+
+            <div style="width:200px">
+                <input type="submit" class="btn btn-danger btn-user btn-block" value="Cambiar Contraseña" />
+            </div>
+        }
+
+    </div>
+</div>

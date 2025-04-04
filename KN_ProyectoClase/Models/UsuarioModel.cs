@@ -11,5 +11,8 @@ namespace KN_ProyectoClase.Models
         public string Contrasena { get; set; }
         public string Nombre { get; set; }
         public string Correo { get; set; }
+
+        public string ContrasenaAnterior { get; set; }
+        public string ConfirmarContrasena { get; set; }
     }
 }
