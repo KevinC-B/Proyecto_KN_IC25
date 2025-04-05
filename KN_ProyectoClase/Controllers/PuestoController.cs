@@ -54,7 +54,7 @@ namespace KN_ProyectoClase.Controllers
         {
             using (var context = new KN_DBEntities())
             {
-                var info = context.Puesto.Where(x => x.id == q).FirstOrDefault();
+                var info = context.Puesto.Where(x => x.Id == q).FirstOrDefault();
                 return View(info);
             }
         }
@@ -64,7 +64,7 @@ namespace KN_ProyectoClase.Controllers
         {
             using (var context = new KN_DBEntities())
             {
-                var info = context.Puesto.Where(x => x.id == model.Id).FirstOrDefault();
+                var info = context.Puesto.Where(x => x.Id == model.Id).FirstOrDefault();
 
                 info.Nombre = model.Nombre;
                 info.Descripcion = model.Descripcion;

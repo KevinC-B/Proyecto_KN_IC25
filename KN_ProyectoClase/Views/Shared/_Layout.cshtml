@@ -32,48 +32,66 @@
 
     <div id="wrapper">
 
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        @if (Session["IdPerfilUsuario"] != null)
+        {
 
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("Inicio", "Principal")">
-                <div class="sidebar-brand-icon rotate-n-15"></div>
-                <div class="sidebar-brand-text mx-3">Proyecto KN</div>
-            </a>
 
-            <hr class="sidebar-divider my-0">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            @if (Session["IdPerfilUsuario"] != null && Session["IdPerfilUsuario"].ToString() == "1")
-            {
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("ConsultarPuestos", "Puesto")">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Mant. Puestos</span>
-                    </a>
-                </li>
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("Inicio", "Principal")">
+                    <div class="sidebar-brand-icon rotate-n-15"></div>
+                    <div class="sidebar-brand-text mx-3">Proyecto KN</div>
+                </a>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("ConsultarOfertas", "Oferta")">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Mant. Ofertas</span>
-                    </a>
-                </li>
-            }
-            else
-            {
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("ConsultarOfertasDisponibles", "Oferta")">
-                        <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Ver Ofertas</span>
-                    </a>
-                </li>
-            }
+                <hr class="sidebar-divider my-0">
 
-            <hr class="sidebar-divider d-none d-md-block">
+                @if (Session["IdPerfilUsuario"] != null && Session["IdPerfilUsuario"].ToString() == "1")
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("ConsultarPuestos", "Puesto")">
+                            <i class="fas fa-fw fa-chart-area"></i>
+                            <span>Mant. Puestos</span>
+                        </a>
+                    </li>
 
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("ConsultarOfertas", "Oferta")">
+                            <i class="fas fa-fw fa-chart-area"></i>
+                            <span>Mant. Ofertas</span>
+                        </a>
+                    </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("ConsultarOfertas", "Oferta")">
+                            <i class="fas fa-fw fa-chart-area"></i>
+                            <span>Seguimiento Ofertas</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("ConsultarOfertasDisponibles", "Oferta")">
+                            <i class="fas fa-fw fa-chart-area"></i>
+                            <span>Ver Ofertas</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("ConsultarOfertasDisponibles", "Oferta")">
+                            <i class="fas fa-fw fa-chart-area"></i>
+                            <span>Ver Ofertas Aplicadas</span>
+                        </a>
+                    </li>
+                }
+
+                <hr class="sidebar-divider d-none d-md-block">
+
+                <div class="text-center d-none d-md-inline">
+                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                </div>
+            </ul>
+        }
 
         <div id="content-wrapper" class="d-flex flex-column">
 

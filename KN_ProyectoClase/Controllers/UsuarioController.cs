@@ -33,7 +33,7 @@ namespace KN_ProyectoClase.Controllers
         {
             try
             {
-                if (model.Contrasena != model.ConfirmarContrasena)
+                if (model.Contrasenna != model.ConfirmarContrasenna)
                 {
                     ViewBag.Mensaje = "Las contraseñas no concuerdan";
                     return View();
@@ -46,13 +46,13 @@ namespace KN_ProyectoClase.Controllers
 
                     if (info != null)
                     {
-                        if (model.ContrasenaAnterior != info.Contrasena)
+                        if (model.ContrasennaAnterior != info.Contrasenna)
                         {
                             ViewBag.Mensaje = "Las contraseñas no concuerdan";
                             return View();
                         }
 
-                        info.Contrasena = model.Contrasena;
+                        info.Contrasenna = model.Contrasenna;
                         context.SaveChanges();
 
                         string mensaje = $"Hola {info.Nombre}, se ha realizado el cambio de contraseña.";

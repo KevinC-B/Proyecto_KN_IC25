@@ -12,19 +12,18 @@ namespace KN_ProyectoClase.BaseDatos
     using System;
     using System.Collections.Generic;
     
-    public partial class Puesto
+    public partial class EstadoAplicacion
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Puesto()
+        public EstadoAplicacion()
         {
-            this.Oferta = new HashSet<Oferta>();
+            this.UsuariosOferta = new HashSet<UsuariosOferta>();
         }
     
-        public long Id { get; set; }
-        public string Nombre { get; set; }
-        public string Descripcion { get; set; }
+        public int Id { get; set; }
+        public string NombreEstado { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Oferta> Oferta { get; set; }
+        public virtual ICollection<UsuariosOferta> UsuariosOferta { get; set; }
     }
 }

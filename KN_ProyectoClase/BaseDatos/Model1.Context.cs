@@ -27,12 +27,13 @@ namespace KN_ProyectoClase.BaseDatos
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Error> Error { get; set; }
+        public virtual DbSet<EstadoAplicacion> EstadoAplicacion { get; set; }
         public virtual DbSet<Oferta> Oferta { get; set; }
         public virtual DbSet<Perfil> Perfil { get; set; }
         public virtual DbSet<Puesto> Puesto { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<UsuariosOferta> UsuariosOferta { get; set; }
-        public virtual DbSet<Error> Error { get; set; }
     
         public virtual ObjectResult<ConsultarOfertas_Result> ConsultarOfertas()
         {
@@ -44,28 +45,28 @@ namespace KN_ProyectoClase.BaseDatos
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarPuestos_Result>("ConsultarPuestos");
         }
     
-        public virtual ObjectResult<IniciarSesion_Result> IniciarSesion(string identificacion, string contrasena)
+        public virtual ObjectResult<IniciarSesion_Result> IniciarSesion(string identificacion, string contrasenna)
         {
             var identificacionParameter = identificacion != null ?
                 new ObjectParameter("Identificacion", identificacion) :
                 new ObjectParameter("Identificacion", typeof(string));
     
-            var contrasenaParameter = contrasena != null ?
-                new ObjectParameter("Contrasena", contrasena) :
-                new ObjectParameter("Contrasena", typeof(string));
+            var contrasennaParameter = contrasenna != null ?
+                new ObjectParameter("Contrasenna", contrasenna) :
+                new ObjectParameter("Contrasenna", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<IniciarSesion_Result>("IniciarSesion", identificacionParameter, contrasenaParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<IniciarSesion_Result>("IniciarSesion", identificacionParameter, contrasennaParameter);
         }
     
-        public virtual int RegistrarCuenta(string identificacion, string contrasena, string nombre, string correo)
+        public virtual int RegistrarCuenta(string identificacion, string contrasenna, string nombre, string correo)
         {
             var identificacionParameter = identificacion != null ?
                 new ObjectParameter("Identificacion", identificacion) :
                 new ObjectParameter("Identificacion", typeof(string));
     
-            var contrasenaParameter = contrasena != null ?
-                new ObjectParameter("Contrasena", contrasena) :
-                new ObjectParameter("Contrasena", typeof(string));
+            var contrasennaParameter = contrasenna != null ?
+                new ObjectParameter("Contrasenna", contrasenna) :
+                new ObjectParameter("Contrasenna", typeof(string));
     
             var nombreParameter = nombre != null ?
                 new ObjectParameter("Nombre", nombre) :
@@ -75,7 +76,7 @@ namespace KN_ProyectoClase.BaseDatos
                 new ObjectParameter("Correo", correo) :
                 new ObjectParameter("Correo", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RegistrarCuenta", identificacionParameter, contrasenaParameter, nombreParameter, correoParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RegistrarCuenta", identificacionParameter, contrasennaParameter, nombreParameter, correoParameter);
         }
     
         public virtual int RegistrarError(Nullable<long> idUsuario, string mensaje, string origen)

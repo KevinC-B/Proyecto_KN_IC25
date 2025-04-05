@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -70,14 +71,14 @@ namespace KN_ProyectoClase.Controllers
         }
 
         [HttpPost]
-        public ActionResult AgregarOferta(OfertaModel model)
+        public ActionResult AgregarOferta(OfertaModel model, HttpPostedFileBase ImagenOferta)
         {
             try
             {
-
                 using (var context = new KN_DBEntities())
                 {
                     Oferta tabla = new Oferta();
+                    tabla.Id = 0;
                     tabla.IdPuesto = model.IdPuesto;
                     tabla.Cantidad = model.Cantidad;
                     tabla.Salario = model.Salario;
@@ -88,7 +89,18 @@ namespace KN_ProyectoClase.Controllers
                     var result = context.SaveChanges();
 
                     if (result > 0)
+                    {
+                        //Guardar la imagen
+                        string extension = Path.GetExtension(ImagenOferta.FileName);
+                        string ruta = AppDomain.CurrentDomain.BaseDirectory + "ImagenesOfertas\\" + tabla.Id + extension;
+
+                        ImagenOferta.SaveAs(ruta);
+
+                        tabla.Imagen = "/ImagenesOfertas/" + tabla.Id + extension;
+                        context.SaveChanges();
+
                         return RedirectToAction("ConsultarOfertas", "Oferta");
+                    }
                     else
                     {
                         ViewBag.Mensaje = "La información no se ha podido registrar correctamente";
@@ -123,7 +135,7 @@ namespace KN_ProyectoClase.Controllers
         }
 
         [HttpPost]
-        public ActionResult ActualizarOferta(Oferta model)
+        public ActionResult ActualizarOferta(Oferta model, HttpPostedFileBase ImagenOferta)
         {
             try
             {
@@ -137,12 +149,30 @@ namespace KN_ProyectoClase.Controllers
                 info.Salario = model.Salario;
                 info.Horario= model.Horario;
                 info.Disponible= model.Disponible;
+
+                if (ImagenOferta != null)
+                {
+                    //Guardar la imagen
+                    string rutaBase = AppDomain.CurrentDomain.BaseDirectory;
+
+                    string extension = Path.GetExtension(ImagenOferta.FileName);
+                    string ruta = AppDomain.CurrentDomain.BaseDirectory + "ImagenesOfertas\\" + model.Id + extension;
+
+                    if (model.Imagen != null)
+                        System.IO.File.Delete(rutaBase + model.Imagen);
+
+                    ImagenOferta.SaveAs(ruta);
+
+                    info.Imagen = "/ImagenesOfertas/" + model.Id + extension;
+                }
+
                 var result = context.SaveChanges();
 
                 if (result > 0)
                     return RedirectToAction("ConsultarOfertas", "Oferta");
                 else
                 {
+                    CargarComboPuestos();
                     ViewBag.Mensaje = "La información no se ha podido registrar correctamente";
                     return View();
                 }
@@ -167,7 +197,7 @@ namespace KN_ProyectoClase.Controllers
 
                 foreach (var item in info)
                 {
-                    puestoCombo.Add(new SelectListItem { Value = item.id.ToString(), Text = item.Nombre });
+                    puestoCombo.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Nombre });
                 }
 
                 ViewBag.PuestoCombo = puestoCombo;

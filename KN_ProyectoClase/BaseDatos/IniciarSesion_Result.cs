@@ -15,7 +15,7 @@ namespace KN_ProyectoClase.BaseDatos
     {
         public long Id { get; set; }
         public string Identificacion { get; set; }
-        public string Contrasena { get; set; }
+        public string Contrasenna { get; set; }
         public string NombreUsuario { get; set; }
         public string Correo { get; set; }
         public bool Estado { get; set; }

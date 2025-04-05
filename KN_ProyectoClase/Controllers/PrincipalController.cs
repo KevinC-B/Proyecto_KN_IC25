@@ -59,7 +59,7 @@ namespace KN_ProyectoClase.Controllers
                 //EF utilizando SP
                 using (var context = new KN_DBEntities())
                 {
-                    var result = context.RegistrarCuenta(model.Identificacion, model.Contrasena, model.Nombre, model.Correo);
+                    var result = context.RegistrarCuenta(model.Identificacion, model.Contrasenna, model.Nombre, model.Correo);
 
                     if (result > 0)
                     {
@@ -117,7 +117,7 @@ namespace KN_ProyectoClase.Controllers
                 //EF SP
                 using (var context = new KN_DBEntities())
                 {
-                    var info = context.IniciarSesion(model.Identificacion, model.Contrasena).FirstOrDefault();
+                    var info = context.IniciarSesion(model.Identificacion, model.Contrasenna).FirstOrDefault();
 
                     if (info != null)
                     {
@@ -170,7 +170,7 @@ namespace KN_ProyectoClase.Controllers
                     {
                         var codigoTemporal = CrearCodigo();
 
-                        info.Contrasena = codigoTemporal;
+                        info.Contrasenna = codigoTemporal;
                         context.SaveChanges();
 
                         string mensaje = $"Hola {info.Nombre}, por favor utilice el siguiente código para ingresar al sistema: {codigoTemporal}";
